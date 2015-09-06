@@ -20,7 +20,7 @@ class Author(models.Model):
     last_name = models.CharField(max_length=40)
     email = models.EmailField()
     def __unicode__(self):
-        return self.name
+        return self.first_name
 
 class Book(models.Model):
     title = models.CharField(max_length=100)
@@ -28,4 +28,4 @@ class Book(models.Model):
     publisher = models.ForeignKey(Publisher)
     publication_date = models.DateField()
     def __unicode__(self):
-        return self.name
+        return self.title
