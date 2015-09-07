@@ -17,6 +17,22 @@ class BookAdmin(admin.ModelAdmin):
     date_hierarchy = 'publication_date'
     # Provides default descending sort on publication date
     ordering = ('-publication_date',)
+    # Provides a custom ordering of the fields the admin user sees when you add a book
+    # More natural to fill up new book in the following order
+    # title -> authors -> publisher -> date
+    # Also, provide ability to hide fields 
+    # Eg. remove publication_date as an edit option by admin users
+    # Note: When using an incomplete form, Django auto-sets missing field as 'None'
+    # So, make sure that field has null=True in model.py
+    fields = ('title', 'authors', 'publisher','publication_date')
+    # filter_horizontal provides better UI 
+    # for admin users to interact with many-to-many fields.
+    # May also use filter_vertical.
+    filter_horizontal = ('authors',)
+    # By default, one-to-many fields are showed as multiple-choice
+    # But list may get too long. raw_id_fields simplifies it as a text box
+    raw_id_fields = ('publisher',)
+
 
 # Admin page automatically includes user groups and setings
 # Following code registers the app's model tables within the admin page
