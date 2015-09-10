@@ -3,7 +3,9 @@
     <title>Search</title>
 </head>
 <body>
-    <form action="/search/" method="get">
+    <!-- <form action="/search/" method="get"> -->
+    <!-- This removes the hardcoded url. Action: "" points to current url -->
+    <form action="" method="get">
     	<!--
     	Action: points to a url. 
     	Method: GET/POST/PUT
@@ -13,5 +15,14 @@
         <input type="text" name="q">
         <input type="submit" value="Search">
     </form>
+    {% if errors %}
+    <p style="color: red;">
+        <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </p>
+    {% endif %}
 </body>
 </html>

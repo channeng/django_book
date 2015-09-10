@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>Contact us</title>
+</head>
+<body>
+    <h1>Contact us</h1>
+
+    <form action="/contact/" method="post">
+    <table>
+        <tr><td>Subject: </td><td><input type="text" name="subject"></td></tr>
+        <tr><td>Your e-mail (optional): </td><td><input type="text" name="email"></td></tr>
+        <tr><td><p>Message: </td><td><textarea name="message" rows="10" cols="50"></textarea></td></tr>
+    </table>
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</body>
+</html>

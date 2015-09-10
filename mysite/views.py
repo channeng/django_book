@@ -1,6 +1,7 @@
 # from django.template.loader import get_template
 # from django.template import Context
-from django.http import HttpResponse
+from django.core.mail import send_mail
+from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render
 import datetime
 
@@ -41,3 +42,23 @@ def display_headers(request):
         html.append('<tr><td>%s</td><td>%s</td></tr>' % (k, v))
     # creates a html table appending all the rows
     return HttpResponse('<table>%s</table>' % '\n'.join(html))
+
+def contact(request):
+    errors = []
+    if request.method == 'POST':
+        if not request.POST.get('subject', ''):
+            errors.append('Enter a subject.')
+        if not request.POST.get('message', ''):
+            errors.append('Enter a message.')
+        if request.POST.get('email') and '@' not in request.POST['email']:
+            errors.append('Enter a valid e-mail address.')
+        if not errors:
+            send_mail(
+                request.POST['subject'],
+                request.POST['message'],
+                request.POST.get('email', 'noreply@example.com'),
+                ['siteowner@example.com'],
+            )
+            return HttpResponseRedirect('/contact/thanks/')
+    return render(request, 'contact_form/contact_form.html',
+        {'errors': errors})

@@ -1,12 +1,15 @@
 <p>You searched for: <strong>{{ query }}</strong></p>
 
 {% if books %}
+	<!-- Pluralize filter outputs 's' if books is plural-->
     <p>Found {{ books|length }} book{{ books|pluralize }}.</p>
     <ul>
         {% for book in books %}
         <li>{{ book.title }}</li>
         {% endfor %}
     </ul>
+    <p><a href="{{ backlink }}">Click here</a> to go back</p>
 {% else %}
     <p>No books matched your search criteria.</p>
+    <p><a href="{{ backlink }}">Click here</a> to go back</p>
 {% endif %}
