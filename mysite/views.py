@@ -3,6 +3,7 @@
 from django.core.mail import send_mail
 from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render
+from mysite.forms import ContactForm
 import datetime
 
 def hello(request):
@@ -43,22 +44,25 @@ def display_headers(request):
     # creates a html table appending all the rows
     return HttpResponse('<table>%s</table>' % '\n'.join(html))
 
+def email_success(request):
+    return HttpResponse("Email sent to admin! You will be contacted shortly.")
+
 def contact(request):
-    errors = []
+    # Check if request method is POST, which is true in a form submission.
+    # If so, this will execute the form-processing part of the view.
     if request.method == 'POST':
-        if not request.POST.get('subject', ''):
-            errors.append('Enter a subject.')
-        if not request.POST.get('message', ''):
-            errors.append('Enter a message.')
-        if request.POST.get('email') and '@' not in request.POST['email']:
-            errors.append('Enter a valid e-mail address.')
-        if not errors:
-            send_mail(
-                request.POST['subject'],
-                request.POST['message'],
-                request.POST.get('email', 'noreply@example.com'),
-                ['siteowner@example.com'],
-            )
+        form = ContactForm(request.POST)
+        # form.is_valid() checks if all required fields in the form is filled.
+        if form.is_valid():
+            # if form is valid, then clean the form data.
+            cd = form.cleaned_data
+            # Execute whatever you want to do with the form.
+            #################
+            # Redirect user to another page
+            # You should ALWAYS do a redirect after a POST, 
+            # so that the user does not duplicate the POST request
             return HttpResponseRedirect('/contact/thanks/')
-    return render(request, 'contact_form/contact_form.html',
-        {'errors': errors})
+    else:
+        form = ContactForm()
+    context = {'form': form}
+    return render(request, 'contact_form/contact_form.html', context)
