@@ -63,6 +63,11 @@ def contact(request):
             # so that the user does not duplicate the POST request
             return HttpResponseRedirect('/contact/thanks/')
     else:
-        form = ContactForm()
+        # Set a pre-populated text in the subject.
+        # Note that passing in 'initial' does not cause the form to be bound. (i.e. it is unbound)
+        # This means that it won't have any error messages unlike a bound form.
+        form = ContactForm(
+            initial={'subject': 'I love your site!'}
+        )
     context = {'form': form}
     return render(request, 'contact_form/contact_form.html', context)

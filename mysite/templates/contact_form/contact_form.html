@@ -1,3 +1,20 @@
+<!-- Basic CSS styling for errors in forms -->
+<style type="text/css">
+    ul.errorlist {
+        margin: 0;
+        padding: 0;
+    }
+    .errorlist li {
+        background-color: red;
+        color: white;
+        display: block;
+        font-size: 10px;
+        margin: 0 0 3px;
+        padding: 4px 5px;
+    }
+</style>
+
+<!-- Contact form HTML begin -->
 <html>
 <head>
     <title>Contact us</title>
@@ -12,9 +29,33 @@
     {% endif %}
 
     <form action="/contact/" method="post">
+<!--         BASIC form construction without customising fields.
     <table>
         {{ form.as_table }}
-    </table>
+    </table> -->
+    <!-- COMPLEX form construction by customizing where errors appears etc. -->
+        <div class="field">
+            
+            <label for="id_subject">Subject:</label>
+            <!-- Each form field widget (presentation logic, incl textbox and validation)
+            is rendered individually, rather than as a table above ^ -->
+            {{ form.subject }}
+            <!-- Each form field's error is rendered in place.
+            This is a <ul class='errorlist'>
+            form.field.errors can also be treated as a boolean,
+            or iterated over as a list. -->
+            {{ form.subject.errors }}
+        </div>
+        <div class="field">
+            {{ form.email.errors }}
+            <label for="id_email">Your e-mail address:</label>
+            {{ form.email }}
+        </div>
+        <div class="field">
+            {{ form.message.errors }}
+            <label for="id_message">Message:</label>
+            {{ form.message }}
+        </div>
         <!-- Handle cross-site request forgeries -->
         {% csrf_token %}
         <input type="submit" value="Submit">
